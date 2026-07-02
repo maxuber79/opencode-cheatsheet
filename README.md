@@ -9,6 +9,7 @@ Cheat-sheet interactiva con todos los comandos de [OpenCode](https://opencode.ai
 - 🔍 Buscador en vivo (atajo `/` para enfocarlo)
 - 🏷️ Filtros por categoría: atajos, configuración, modelos, contexto, símbolos, personalización y CLI
 - 📋 Copiar al portapapeles en un clic
+- 🧱 Estructura AI-Ready — archivos recomendados para que cualquier IA entienda tu proyecto
 - 🎨 Tema *amber phosphor terminal*
 - 📱 Responsive y accesible (foco visible, `prefers-reduced-motion`)
 - ⚡ 100% estático — sin backend, sin build
@@ -42,3 +43,25 @@ Agregar o modificar uno es una sola línea; no hace falta tocar el HTML.
 
 Referencia verificada contra la documentación oficial (OpenCode v1.16.2, jun. 2026).
 No reemplaza la [documentación oficial](https://opencode.ai/docs).
+
+## Estructura AI-Ready para cualquier proyecto
+
+Estos archivos ayudan a cualquier IA (Claude Code, OpenCode, Cursor, Copilot, etc.) a entender, navegar y contribuir al proyecto:
+
+```
+proyecto/
+├── AI.md                 ← Instrucciones y reglas para la IA
+├── README.md             ← Propósito, setup, comandos
+└── docs/
+    ├── ARCHITECTURE.md   ← Stack, estructura, flujo de datos
+    ├── STYLEGUIDE.md     ← Convenciones de código
+    ├── DECISIONS.md      ← Registro de decisiones técnicas (ADRs)
+    ├── TODO.md           ← Tareas pendientes
+    ├── CHANGELOG.md      ← Historial de cambios
+    ├── CONTRIBUTING.md   ← Workflow de contribución
+    ├── SECURITY.md       ← Consideraciones de seguridad
+    ├── PROGRESS.md       ← Estado actual del proyecto
+    └── PROMPTS.md        ← Prompts útiles para IA
+```
+
+> **Nota:** `AI.md` es el nombre recomendado. También funciona como `CLAUDE.md` (Claude Code) o `AGENTS.md` (OpenCode).

@@ -7,6 +7,7 @@
 
 <!-- Bootstrap 5 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <!-- Fuentes -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,6 +172,14 @@
 
   ::selection{ background: rgba(255,176,0,.28); color: var(--cream); }
 
+  .struct-note{
+    font-size: .88rem; color: var(--muted); line-height: 1.6;
+    padding: 16px 18px; margin: 16px 0 20px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .struct-note code{ color: var(--amber-br); font-family: var(--mono); }
+
   @media (max-width: 560px){
     .cmd{ flex-wrap: wrap; }
     .copy-btn{ margin-left: auto; }
@@ -239,6 +248,37 @@ Aplica SIEMPRE estas reglas:
 5. Termina con un resumen y una pregunta antes de continuar.</pre>
       </div>
     </div>
+
+    <!-- Estructura del proyecto AI-Ready -->
+    <section class="section structure-files">
+      <div class="section-head">
+        <h2>🧱 Estructura del proyecto · AI-Ready</h2>
+      </div>
+      <div class="struct-note">
+        Estos archivos ayudan a cualquier IA a entender, navegar y contribuir al proyecto.
+        <code>AI.md</code> es el nombre recomendado; también funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).
+      </div>
+      <div id="structure-files"></div>
+    </section>
+
+    <div class="featured" style="margin-top:40px;">
+      <h3>Comandos · Crear estructura al instante</h3>
+      <p>Copia y ejecuta uno de estos comandos para crear toda la estructura AI-Ready en tu proyecto.</p>
+      <div class="code-block">
+        <button class="copy-btn" data-copy="mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md" aria-label="Copiar comando Git Bash">Copiar</button>
+        <pre><span class="tok-key"># Git Bash / Linux / macOS</span>
+mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md</pre>
+      </div>
+      <div class="code-block" style="margin-top:12px;">
+        <button class="copy-btn" data-copy="New-Item -ItemType Directory -Path docs -Force; 'AI.md','README.md' | % { New-Item $_ -Force }; 'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO','CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS','PROMPTS' | % { New-Item ('docs/' + $_ + '.md') -Force }" aria-label="Copiar comando PowerShell">Copiar</button>
+        <pre><span class="tok-key"># PowerShell</span>
+New-Item -ItemType Directory -Path docs -Force
+'AI.md','README.md' | % { New-Item $_ -Force }
+'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO',
+'CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS',
+'PROMPTS' | % { New-Item &quot;docs/$_.md&quot; -Force }</pre>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -305,6 +345,21 @@ const COMMANDS = [
   { cat:'cli', type:'cli', name:'opencode stats', desc:'Uso de tokens por modelo y proyecto.' },
   { cat:'cli', type:'cli', name:'opencode agent create', desc:'Crea un agente con system prompt y permisos personalizados.' },
   { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
+];
+
+/* ---------- Estructura ---------- */
+const STRUCTURE = [
+  { icon:'bi-file-text', name:'AI.md', desc:'Instrucciones y reglas para la IA. También funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).' },
+  { icon:'bi-book', name:'README.md', desc:'Propósito del proyecto, setup, estructura y comandos principales.' },
+  { icon:'bi-journal-code', name:'docs/ARCHITECTURE.md', desc:'Stack tecnológico, estructura del proyecto y flujo de datos.' },
+  { icon:'bi-palette', name:'docs/STYLEGUIDE.md', desc:'Convenciones de código, naming, formato y buenas prácticas.' },
+  { icon:'bi-signpost-2', name:'docs/DECISIONS.md', desc:'Registro de decisiones técnicas (ADRs) y por qué se tomaron.' },
+  { icon:'bi-list-check', name:'docs/TODO.md', desc:'Tareas pendientes, bugs conocidos y próximos pasos.' },
+  { icon:'bi-clock-history', name:'docs/CHANGELOG.md', desc:'Historial de cambios del proyecto por versión.' },
+  { icon:'bi-person-plus', name:'docs/CONTRIBUTING.md', desc:'Workflow de contribución, estilo de commits y PRs.' },
+  { icon:'bi-shield-check', name:'docs/SECURITY.md', desc:'Consideraciones de seguridad, autenticación y manejo de secretos.' },
+  { icon:'bi-graph-up-arrow', name:'docs/PROGRESS.md', desc:'Estado actual del proyecto, hitos y avance.' },
+  { icon:'bi-robot', name:'docs/PROMPTS.md', desc:'Prompts útiles y ejemplos de entrada para la IA.' },
 ];
 
 /* ---------- Render ---------- */
@@ -404,6 +459,21 @@ async function copyText(text, btn){
   setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1200);
 }
 
+/* ---------- Estructura ---------- */
+function renderStructure(){
+  const el = document.getElementById('structure-files');
+  if(!el) return;
+  el.innerHTML = STRUCTURE.map(s => `
+    <div class="cmd">
+      <i class="bi ${s.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>
+      <div class="body">
+        <code class="name">${s.name}</code>
+        <div class="desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 document.addEventListener('click', e => {
   const btn = e.target.closest('.copy-btn[data-copy]');
   if(!btn) return;
@@ -419,6 +489,7 @@ document.addEventListener('keydown', e => {
 
 buildChips();
 render();
+renderStructure();
 </script>
 </body>
 </html>
