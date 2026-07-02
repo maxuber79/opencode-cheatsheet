@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  :root{
+  :root, .theme-amber{
     /* Paleta — amber phosphor terminal */
     --bg:        #16120b;
     --bg-2:      #1e190f;
@@ -33,6 +33,20 @@
 
     --radius: 10px;
     --maxw: 1080px;
+  }
+
+  .theme-monokai{
+    --bg:        #272822;
+    --bg-2:      #2d2e27;
+    --bg-3:      #383830;
+    --border:    #3e3d32;
+    --border-2:  #49483e;
+    --amber:     #f92672;
+    --amber-br:  #e6db74;
+    --amber-dim: #a6e22e;
+    --cream:     #f8f8f2;
+    --muted:     #a59f85;
+    --muted-2:   #75715e;
   }
 
   *{ box-sizing: border-box; }
@@ -172,15 +186,41 @@
   .footer-slogan{ color: var(--amber-dim); font-size:.78rem; width:100%; text-align:center; margin-top:14px; }
   .footer-slogan i{ color: var(--amber); }
 
-  ::selection{ background: rgba(255,176,0,.28); color: var(--cream); }
-
-  .struct-note{
-    font-size: .88rem; color: var(--muted); line-height: 1.6;
-    padding: 16px 18px; margin: 16px 0 20px;
-    background: var(--bg-2); border: 1px solid var(--border);
-    border-radius: var(--radius);
+  .scroll-top{
+    position:fixed; bottom:32px; right:24px; z-index:100;
+    width:42px; height:42px; border-radius:50%;
+    background:var(--bg-3); border:1px solid var(--border-2);
+    color:var(--amber); font-size:1.2rem;
+    cursor:pointer; opacity:0; pointer-events:none;
+    transition: opacity .25s, background .15s, border-color .15s;
+    display:flex; align-items:center; justify-content:center;
   }
-  .struct-note code{ color: var(--amber-br); font-family: var(--mono); }
+  .scroll-top.show{ opacity:1; pointer-events:auto; }
+  .scroll-top:hover{ background:var(--border-2); border-color:var(--amber-dim); }
+  .scroll-top:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+
+  .theme-switch{
+    position:relative; display:inline-block; width:48px; height:26px; flex-shrink:0;
+  }
+  .theme-switch input{ opacity:0; width:0; height:0; }
+  .theme-switch .slider{
+    position:absolute; inset:0; cursor:pointer;
+    background:var(--bg-3); border:1px solid var(--border-2); border-radius:13px;
+    transition:all .25s;
+  }
+  .theme-switch .slider::before{
+    content:""; position:absolute; left:3px; top:2px;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--amber); transition:all .25s;
+  }
+  .theme-switch input:checked + .slider{ background:var(--bg-3); border-color:var(--amber-dim); }
+  .theme-switch input:checked + .slider::before{
+    transform:translateX(22px);
+    background:var(--amber-br);
+  }
+  .theme-switch input:focus-visible + .slider{ outline:2px solid var(--amber); outline-offset:2px; }
+
+  ::selection{ background: rgba(255,176,0,.28); color: var(--cream); }
 
   @media (max-width: 560px){
     .cmd{ flex-wrap: wrap; }
@@ -193,7 +233,17 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="#top"><span class="prompt">❯</span> opencode<span class="cursor">_</span></a>
-    <span class="ver-pill">cheat-sheet · v1.16.2</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="ver-pill">cheat-sheet · v1.16.2</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:var(--mono);font-size:.72rem;color:var(--muted);">Tema</span>
+        <label class="theme-switch" title="Amber / Monokai">
+          <input type="checkbox" id="themeToggle" aria-label="Cambiar tema">
+          <span class="slider"></span>
+        </label>
+        <span id="themeLabel" style="font-family:var(--mono);font-size:.72rem;color:var(--amber);font-weight:600;"></span>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -251,36 +301,6 @@ Aplica SIEMPRE estas reglas:
       </div>
     </div>
 
-    <!-- Estructura del proyecto AI-Ready -->
-    <section class="section structure-files">
-      <div class="section-head">
-        <h2>Estructura del proyecto · AI-Ready</h2>
-      </div>
-      <div class="struct-note">
-        Estos archivos ayudan a cualquier IA a entender, navegar y contribuir al proyecto.
-        <code>AI.md</code> es el nombre recomendado; también funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).
-      </div>
-      <div id="structure-files"></div>
-    </section>
-
-    <div class="featured" style="margin-top:40px;">
-      <h3>Comandos · Crear estructura al instante</h3>
-      <p>Copia y ejecuta uno de estos comandos para crear toda la estructura AI-Ready en tu proyecto.</p>
-      <div class="code-block">
-        <button class="copy-btn" data-copy="mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md" aria-label="Copiar comando Git Bash">Copiar</button>
-        <pre><span class="tok-key"># Git Bash / Linux / macOS</span>
-mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md</pre>
-      </div>
-      <div class="code-block" style="margin-top:12px;">
-        <button class="copy-btn" data-copy="New-Item -ItemType Directory -Path docs -Force; 'AI.md','README.md' | % { New-Item $_ -Force }; 'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO','CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS','PROMPTS' | % { New-Item ('docs/' + $_ + '.md') -Force }" aria-label="Copiar comando PowerShell">Copiar</button>
-        <pre><span class="tok-key"># PowerShell</span>
-New-Item -ItemType Directory -Path docs -Force
-'AI.md','README.md' | % { New-Item $_ -Force }
-'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO',
-'CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS',
-'PROMPTS' | % { New-Item &quot;docs/$_.md&quot; -Force }</pre>
-      </div>
-    </div>
   </div>
 </main>
 
@@ -292,6 +312,7 @@ New-Item -ItemType Directory -Path docs -Force
   </div>
 </footer>
 
+<button class="scroll-top" id="scrollTop" aria-label="Volver arriba"><i class="bi bi-chevron-up"></i></button>
 <script>
 /* ---------- Datos: comandos ---------- */
 const CATS = [
@@ -348,21 +369,6 @@ const COMMANDS = [
   { cat:'cli', type:'cli', name:'opencode stats', desc:'Uso de tokens por modelo y proyecto.' },
   { cat:'cli', type:'cli', name:'opencode agent create', desc:'Crea un agente con system prompt y permisos personalizados.' },
   { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
-];
-
-/* ---------- Estructura ---------- */
-const STRUCTURE = [
-  { icon:'bi-file-text', name:'AI.md', desc:'Instrucciones y reglas para la IA. También funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).' },
-  { icon:'bi-book', name:'README.md', desc:'Propósito del proyecto, setup, estructura y comandos principales.' },
-  { icon:'bi-journal-code', name:'docs/ARCHITECTURE.md', desc:'Stack tecnológico, estructura del proyecto y flujo de datos.' },
-  { icon:'bi-palette', name:'docs/STYLEGUIDE.md', desc:'Convenciones de código, naming, formato y buenas prácticas.' },
-  { icon:'bi-signpost-2', name:'docs/DECISIONS.md', desc:'Registro de decisiones técnicas (ADRs) y por qué se tomaron.' },
-  { icon:'bi-list-check', name:'docs/TODO.md', desc:'Tareas pendientes, bugs conocidos y próximos pasos.' },
-  { icon:'bi-clock-history', name:'docs/CHANGELOG.md', desc:'Historial de cambios del proyecto por versión.' },
-  { icon:'bi-person-plus', name:'docs/CONTRIBUTING.md', desc:'Workflow de contribución, estilo de commits y PRs.' },
-  { icon:'bi-shield-check', name:'docs/SECURITY.md', desc:'Consideraciones de seguridad, autenticación y manejo de secretos.' },
-  { icon:'bi-graph-up-arrow', name:'docs/PROGRESS.md', desc:'Estado actual del proyecto, hitos y avance.' },
-  { icon:'bi-robot', name:'docs/PROMPTS.md', desc:'Prompts útiles y ejemplos de entrada para la IA.' },
 ];
 
 /* ---------- Render ---------- */
@@ -462,21 +468,6 @@ async function copyText(text, btn){
   setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1200);
 }
 
-/* ---------- Estructura ---------- */
-function renderStructure(){
-  const el = document.getElementById('structure-files');
-  if(!el) return;
-  el.innerHTML = STRUCTURE.map(s => `
-    <div class="cmd">
-      <i class="bi ${s.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>
-      <div class="body">
-        <code class="name">${s.name}</code>
-        <div class="desc">${s.desc}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
 document.addEventListener('click', e => {
   const btn = e.target.closest('.copy-btn[data-copy]');
   if(!btn) return;
@@ -492,7 +483,29 @@ document.addEventListener('keydown', e => {
 
 buildChips();
 render();
-renderStructure();
+
+/* ---------- Scroll to top ---------- */
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('show', window.scrollY > 300);
+});
+scrollBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ---------- Theme toggle ---------- */
+const themeToggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('opencode-theme') || 'amber';
+const isSavedMonokai = saved === 'monokai';
+document.documentElement.className = isSavedMonokai ? 'theme-monokai' : 'theme-amber';
+themeToggle.checked = isSavedMonokai;
+document.getElementById('themeLabel').textContent = isSavedMonokai ? 'Monokai' : 'Amber';
+themeToggle.addEventListener('change', () => {
+  const isMonokai = themeToggle.checked;
+  document.documentElement.className = isMonokai ? 'theme-monokai' : 'theme-amber';
+  document.getElementById('themeLabel').textContent = isMonokai ? 'Monokai' : 'Amber';
+  localStorage.setItem('opencode-theme', isMonokai ? 'monokai' : 'amber');
+});
 </script>
 </body>
 </html>
