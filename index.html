@@ -441,8 +441,6 @@ function cmdRow(c){
   const glyph = c.icon
     ? `<i class="bi ${c.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>`
     : `<span class="glyph">${c.type === 'cli' ? '$' : (c.type === 'key' ? '⌨' : '❯')}</span>`;
-  const copyText = c.copy !== undefined ? c.copy : c.name;
-  const aliasHtml = c.alias ? ` <span class="alias">· ${c.alias}</span>` : '';
 
   let right = '';
   if(c.type === 'key'){
