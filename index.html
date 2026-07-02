@@ -387,6 +387,7 @@ const COMMANDS = [
   { cat:'cli', type:'cli', name:'opencode stats', desc:'Uso de tokens por modelo y proyecto.' },
   { cat:'cli', type:'cli', name:'opencode agent create', desc:'Crea un agente con system prompt y permisos personalizados.' },
   { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
+  ...STRUCTURE,
 ];
 
 /* ---------- Estructura ---------- */
@@ -463,11 +464,9 @@ function render(){
   sectionsEl.innerHTML = '';
   let visible = 0;
 
-  const allItems = [...COMMANDS, ...STRUCTURE];
-
   CATS.forEach(cat => {
     if(activeCat !== 'all' && activeCat !== cat.key) return;
-    const items = allItems.filter(c => c.cat === cat.key).filter(c => {
+    const items = COMMANDS.filter(c => c.cat === cat.key).filter(c => {
       if(!query) return true;
       return (c.name + ' ' + c.desc + ' ' + (c.alias||'')).toLowerCase().includes(query);
     });
@@ -482,7 +481,7 @@ function render(){
   });
 
   noResults.classList.toggle('show', visible === 0);
-  const total = allItems.length;
+  const total = COMMANDS.length;
   countEl.innerHTML = query || activeCat !== 'all'
     ? `<b>${visible}</b> de ${total} elementos`
     : `<b>${total}</b> elementos · TUI, atajos, CLI y estructura`;
