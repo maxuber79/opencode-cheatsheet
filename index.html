@@ -174,19 +174,6 @@
 
   ::selection{ background: rgba(255,176,0,.28); color: var(--cream); }
 
-  .scroll-top{
-    position:fixed; bottom:32px; right:24px; z-index:100;
-    width:42px; height:42px; border-radius:50%;
-    background:var(--bg-3); border:1px solid var(--border-2);
-    color:var(--amber); font-size:1.2rem;
-    cursor:pointer; opacity:0; pointer-events:none;
-    transition: opacity .25s, background .15s, border-color .15s;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .scroll-top.show{ opacity:1; pointer-events:auto; }
-  .scroll-top:hover{ background:var(--border-2); border-color:var(--amber-dim); }
-  .scroll-top:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
-
   .struct-note{
     font-size: .88rem; color: var(--muted); line-height: 1.6;
     padding: 16px 18px; margin: 16px 0 20px;
@@ -305,7 +292,6 @@ New-Item -ItemType Directory -Path docs -Force
   </div>
 </footer>
 
-<button class="scroll-top" id="scrollTop" aria-label="Volver arriba"><i class="bi bi-chevron-up"></i></button>
 <script>
 /* ---------- Datos: comandos ---------- */
 const CATS = [
@@ -507,15 +493,6 @@ document.addEventListener('keydown', e => {
 buildChips();
 render();
 renderStructure();
-
-/* ---------- Scroll to top ---------- */
-const scrollBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', () => {
-  scrollBtn.classList.toggle('show', window.scrollY > 300);
-});
-scrollBtn.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
 </script>
 </body>
 </html>
