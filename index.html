@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  :root, .theme-amber{
+  :root{
     /* Paleta — amber phosphor terminal */
     --bg:        #16120b;
     --bg-2:      #1e190f;
@@ -33,20 +33,6 @@
 
     --radius: 10px;
     --maxw: 1080px;
-  }
-
-  .theme-monokai{
-    --bg:        #272822;
-    --bg-2:      #2d2e27;
-    --bg-3:      #383830;
-    --border:    #3e3d32;
-    --border-2:  #49483e;
-    --amber:     #f92672;
-    --amber-br:  #e6db74;
-    --amber-dim: #a6e22e;
-    --cream:     #f8f8f2;
-    --muted:     #a59f85;
-    --muted-2:   #75715e;
   }
 
   *{ box-sizing: border-box; }
@@ -220,10 +206,7 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="#top"><span class="prompt">❯</span> opencode<span class="cursor">_</span></a>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span class="ver-pill">cheat-sheet · v1.16.2</span>
-      <button id="themeToggle" aria-label="Cambiar tema" title="Amber / Monokai" style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:7px;color:var(--amber);cursor:pointer;font-size:.9rem;padding:5px 9px;line-height:1;transition:all .15s;">Monokai</button>
-    </div>
+    <span class="ver-pill">cheat-sheet · v1.16.2</span>
   </div>
 </header>
 
@@ -532,18 +515,6 @@ window.addEventListener('scroll', () => {
 });
 scrollBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-/* ---------- Theme toggle ---------- */
-const themeToggle = document.getElementById('themeToggle');
-const saved = localStorage.getItem('opencode-theme') || 'amber';
-document.documentElement.className = saved === 'monokai' ? 'theme-monokai' : 'theme-amber';
-themeToggle.textContent = saved === 'monokai' ? 'Amber' : 'Monokai';
-themeToggle.addEventListener('click', () => {
-  const isMonokai = document.documentElement.classList.contains('theme-monokai');
-  document.documentElement.className = isMonokai ? 'theme-amber' : 'theme-monokai';
-  themeToggle.textContent = isMonokai ? 'Monokai' : 'Amber';
-  localStorage.setItem('opencode-theme', isMonokai ? 'amber' : 'monokai');
 });
 </script>
 </body>
