@@ -201,6 +201,14 @@
   .scroll-top:hover{ background:var(--border-2); border-color:var(--amber-dim); }
   .scroll-top:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
 
+  .struct-note{
+    font-size: .88rem; color: var(--muted); line-height: 1.6;
+    padding: 16px 18px; margin: 16px 0 20px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .struct-note code{ color: var(--amber-br); font-family: var(--mono); }
+
   .theme-switch{
     position:relative; display:inline-block; width:48px; height:26px; flex-shrink:0;
   }
@@ -297,8 +305,19 @@ Aplica SIEMPRE estas reglas:
 4. Trabaja paso a paso, un archivo por vez.
 5. Termina con un resumen y una pregunta antes de continuar.</pre>
       </div>
-      </div>
     </div>
+
+    <!-- Estructura del proyecto AI-Ready -->
+    <section class="section structure-files">
+      <div class="section-head">
+        <h2>Estructura del proyecto · AI-Ready</h2>
+      </div>
+      <div class="struct-note">
+        Estos archivos ayudan a cualquier IA a entender, navegar y contribuir al proyecto.
+        <code>AI.md</code> es el nombre recomendado; también funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).
+      </div>
+      <div id="structure-files"></div>
+    </section>
 
     <div class="featured" style="margin-top:40px;">
       <h3>Comandos · Crear estructura al instante</h3>
@@ -339,7 +358,6 @@ const CATS = [
   { key:'contexto',label:'Contexto' },
   { key:'simbolos',label:'Símbolos' },
   { key:'person',  label:'Personalización' },
-  { key:'estructura', label:'Estructura' },
   { key:'cli',     label:'CLI' },
 ];
 
@@ -387,22 +405,21 @@ const COMMANDS = [
   { cat:'cli', type:'cli', name:'opencode stats', desc:'Uso de tokens por modelo y proyecto.' },
   { cat:'cli', type:'cli', name:'opencode agent create', desc:'Crea un agente con system prompt y permisos personalizados.' },
   { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
-  ...STRUCTURE,
 ];
 
 /* ---------- Estructura ---------- */
 const STRUCTURE = [
-  { cat:'estructura', type:'cmd', icon:'bi-file-text', name:'AI.md', desc:'Instrucciones y reglas para la IA. También funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).' },
-  { cat:'estructura', type:'cmd', icon:'bi-book', name:'README.md', desc:'Propósito del proyecto, setup, estructura y comandos principales.' },
-  { cat:'estructura', type:'cmd', icon:'bi-journal-code', name:'docs/ARCHITECTURE.md', desc:'Stack tecnológico, estructura del proyecto y flujo de datos.' },
-  { cat:'estructura', type:'cmd', icon:'bi-palette', name:'docs/STYLEGUIDE.md', desc:'Convenciones de código, naming, formato y buenas prácticas.' },
-  { cat:'estructura', type:'cmd', icon:'bi-signpost-2', name:'docs/DECISIONS.md', desc:'Registro de decisiones técnicas (ADRs) y por qué se tomaron.' },
-  { cat:'estructura', type:'cmd', icon:'bi-list-check', name:'docs/TODO.md', desc:'Tareas pendientes, bugs conocidos y próximos pasos.' },
-  { cat:'estructura', type:'cmd', icon:'bi-clock-history', name:'docs/CHANGELOG.md', desc:'Historial de cambios del proyecto por versión.' },
-  { cat:'estructura', type:'cmd', icon:'bi-person-plus', name:'docs/CONTRIBUTING.md', desc:'Workflow de contribución, estilo de commits y PRs.' },
-  { cat:'estructura', type:'cmd', icon:'bi-shield-check', name:'docs/SECURITY.md', desc:'Consideraciones de seguridad, autenticación y manejo de secretos.' },
-  { cat:'estructura', type:'cmd', icon:'bi-graph-up-arrow', name:'docs/PROGRESS.md', desc:'Estado actual del proyecto, hitos y avance.' },
-  { cat:'estructura', type:'cmd', icon:'bi-robot', name:'docs/PROMPTS.md', desc:'Prompts útiles y ejemplos de entrada para la IA.' },
+  { icon:'bi-file-text', name:'AI.md', desc:'Instrucciones y reglas para la IA. También funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).' },
+  { icon:'bi-book', name:'README.md', desc:'Propósito del proyecto, setup, estructura y comandos principales.' },
+  { icon:'bi-journal-code', name:'docs/ARCHITECTURE.md', desc:'Stack tecnológico, estructura del proyecto y flujo de datos.' },
+  { icon:'bi-palette', name:'docs/STYLEGUIDE.md', desc:'Convenciones de código, naming, formato y buenas prácticas.' },
+  { icon:'bi-signpost-2', name:'docs/DECISIONS.md', desc:'Registro de decisiones técnicas (ADRs) y por qué se tomaron.' },
+  { icon:'bi-list-check', name:'docs/TODO.md', desc:'Tareas pendientes, bugs conocidos y próximos pasos.' },
+  { icon:'bi-clock-history', name:'docs/CHANGELOG.md', desc:'Historial de cambios del proyecto por versión.' },
+  { icon:'bi-person-plus', name:'docs/CONTRIBUTING.md', desc:'Workflow de contribución, estilo de commits y PRs.' },
+  { icon:'bi-shield-check', name:'docs/SECURITY.md', desc:'Consideraciones de seguridad, autenticación y manejo de secretos.' },
+  { icon:'bi-graph-up-arrow', name:'docs/PROGRESS.md', desc:'Estado actual del proyecto, hitos y avance.' },
+  { icon:'bi-robot', name:'docs/PROMPTS.md', desc:'Prompts útiles y ejemplos de entrada para la IA.' },
 ];
 
 /* ---------- Render ---------- */
@@ -436,11 +453,7 @@ function buildChips(){
 function escapeAttr(s){ return s.replace(/"/g,'&quot;'); }
 
 function cmdRow(c){
-  const copyText = c.copy !== undefined ? c.copy : c.name;
-  const aliasHtml = c.alias ? ` <span class="alias">· ${c.alias}</span>` : '';
-  const glyph = c.icon
-    ? `<i class="bi ${c.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>`
-    : `<span class="glyph">${c.type === 'cli' ? '$' : (c.type === 'key' ? '⌨' : '❯')}</span>`;
+  const glyph = c.type === 'cli' ? '$' : (c.type === 'key' ? '⌨' : '❯');
   const copyText = c.copy !== undefined ? c.copy : c.name;
   const aliasHtml = c.alias ? ` <span class="alias">· ${c.alias}</span>` : '';
 
@@ -485,8 +498,8 @@ function render(){
   noResults.classList.toggle('show', visible === 0);
   const total = COMMANDS.length;
   countEl.innerHTML = query || activeCat !== 'all'
-    ? `<b>${visible}</b> de ${total} elementos`
-    : `<b>${total}</b> elementos · TUI, atajos, CLI y estructura`;
+    ? `<b>${visible}</b> de ${total} comandos`
+    : `<b>${total}</b> comandos · TUI, atajos y CLI`;
 }
 
 /* ---------- Copiar ---------- */
@@ -506,6 +519,21 @@ async function copyText(text, btn){
   setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1200);
 }
 
+/* ---------- Estructura ---------- */
+function renderStructure(){
+  const el = document.getElementById('structure-files');
+  if(!el) return;
+  el.innerHTML = STRUCTURE.map(s => `
+    <div class="cmd">
+      <i class="bi ${s.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>
+      <div class="body">
+        <code class="name">${s.name}</code>
+        <div class="desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 document.addEventListener('click', e => {
   const btn = e.target.closest('.copy-btn[data-copy]');
   if(!btn) return;
@@ -521,6 +549,7 @@ document.addEventListener('keydown', e => {
 
 buildChips();
 render();
+renderStructure();
 
 /* ---------- Scroll to top ---------- */
 const scrollBtn = document.getElementById('scrollTop');
