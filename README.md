@@ -1,17 +1,16 @@
 # OpenCode · Cheat-sheet de comandos
 
-Cheat-sheet interactiva con todos los comandos de [OpenCode](https://opencode.ai) (TUI, atajos y CLI), más una guía de **estructura AI-Ready** para proyectos. Buscador en vivo, filtros por categoría, botón de copiar y selector de tema.
+Cheat-sheet interactiva con todos los comandos de [OpenCode](https://opencode.ai) (TUI, atajos y CLI), con buscador en vivo, filtros por categoría y botón de copiar en cada comando.
 
 🔗 **Demo:** https://maxuber79.github.io/opencode-cheatsheet/
 
 ## Características
 
 - 🔍 Buscador en vivo (atajo `/` para enfocarlo)
-- 🏷️ Filtros por categoría: atajos, configuración, modelos, contexto, símbolos, personalización, estructura y CLI
+- 🏷️ Filtros por categoría: atajos, configuración, modelos, contexto, símbolos, personalización y CLI
 - 📋 Copiar al portapapeles en un clic
 - 🧱 Estructura AI-Ready — archivos recomendados para que cualquier IA entienda tu proyecto
-- 🎨 Selector de tema: Amber Phosphor (terminal) o Monokai
-- ⬆️ Botón scroll-to-top al hacer scroll down
+- 🎨 Tema *amber phosphor terminal*
 - 📱 Responsive y accesible (foco visible, `prefers-reduced-motion`)
 - ⚡ 100% estático — sin backend, sin build
 
@@ -40,8 +39,6 @@ Agregar o modificar uno es una sola línea; no hace falta tocar el HTML.
 { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
 ```
 
-Los archivos de estructura viven en el array `STRUCTURE`. Se integran automáticamente al filtro y búsqueda.
-
 ---
 
 Referencia verificada contra la documentación oficial (OpenCode v1.16.2, jun. 2026).
@@ -68,7 +65,3 @@ proyecto/
 ```
 
 > **Nota:** `AI.md` es el nombre recomendado. También funciona como `CLAUDE.md` (Claude Code) o `AGENTS.md` (OpenCode).
-
----
-
-**Powered by webmain · © 2026 Claudio Muñoz Meza (maxuber)**
