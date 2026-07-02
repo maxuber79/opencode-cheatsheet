@@ -241,14 +241,10 @@
     <a class="brand" href="#top"><span class="prompt">❯</span> opencode<span class="cursor">_</span></a>
     <div style="display:flex;align-items:center;gap:10px;">
       <span class="ver-pill">cheat-sheet · v1.16.2</span>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-family:var(--mono);font-size:.72rem;color:var(--muted);">Tema</span>
-        <label class="theme-switch" title="Amber / Monokai">
-          <input type="checkbox" id="themeToggle" aria-label="Cambiar tema">
-          <span class="slider"></span>
-        </label>
-        <span id="themeLabel" style="font-family:var(--mono);font-size:.72rem;color:var(--amber);font-weight:600;"></span>
-      </div>
+      <label class="theme-switch" title="Amber / Monokai">
+        <input type="checkbox" id="themeToggle" aria-label="Cambiar tema">
+        <span class="slider"></span>
+      </label>
     </div>
   </div>
 </header>
@@ -566,11 +562,9 @@ const saved = localStorage.getItem('opencode-theme') || 'amber';
 const isSavedMonokai = saved === 'monokai';
 document.documentElement.className = isSavedMonokai ? 'theme-monokai' : 'theme-amber';
 themeToggle.checked = isSavedMonokai;
-document.getElementById('themeLabel').textContent = isSavedMonokai ? 'Monokai' : 'Amber';
 themeToggle.addEventListener('change', () => {
   const isMonokai = themeToggle.checked;
   document.documentElement.className = isMonokai ? 'theme-monokai' : 'theme-amber';
-  document.getElementById('themeLabel').textContent = isMonokai ? 'Monokai' : 'Amber';
   localStorage.setItem('opencode-theme', isMonokai ? 'monokai' : 'amber');
 });
 </script>
