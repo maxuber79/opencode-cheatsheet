@@ -2,7 +2,7 @@
 
 Cheat-sheet interactiva con todos los comandos de [OpenCode](https://opencode.ai) (TUI, atajos y CLI), con buscador en vivo, filtros por categoría y botón de copiar en cada comando.
 
-🔗 **Demo:** https://TU-USUARIO.github.io/opencode-cheatsheet/
+🔗 **Demo:** https://maxuber79.github.io/opencode-cheatsheet/
 
 ## Características
 
