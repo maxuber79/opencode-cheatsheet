@@ -301,6 +301,26 @@ Aplica SIEMPRE estas reglas:
       </div>
     </div>
 
+    <div id="structure-files"></div>
+
+    <div class="featured" style="margin-top:40px;">
+      <h3>Comandos · Crear estructura al instante</h3>
+      <p>Copia y ejecuta uno de estos comandos para crear toda la estructura AI-Ready en tu proyecto.</p>
+      <div class="code-block">
+        <button class="copy-btn" data-copy="mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md" aria-label="Copiar comando Git Bash">Copiar</button>
+        <pre><span class="tok-key"># Git Bash / Linux / macOS</span>
+mkdir -p docs && touch AI.md README.md docs/{ARCHITECTURE,STYLEGUIDE,DECISIONS,TODO,CHANGELOG,CONTRIBUTING,SECURITY,PROGRESS,PROMPTS}.md</pre>
+      </div>
+      <div class="code-block" style="margin-top:12px;">
+        <button class="copy-btn" data-copy="New-Item -ItemType Directory -Path docs -Force; 'AI.md','README.md' | % { New-Item $_ -Force }; 'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO','CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS','PROMPTS' | % { New-Item ('docs/' + $_ + '.md') -Force }" aria-label="Copiar comando PowerShell">Copiar</button>
+        <pre><span class="tok-key"># PowerShell</span>
+New-Item -ItemType Directory -Path docs -Force
+'AI.md','README.md' | % { New-Item $_ -Force }
+'ARCHITECTURE','STYLEGUIDE','DECISIONS','TODO',
+'CHANGELOG','CONTRIBUTING','SECURITY','PROGRESS',
+'PROMPTS' | % { New-Item &quot;docs/$_.md&quot; -Force }</pre>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -322,6 +342,7 @@ const CATS = [
   { key:'contexto',label:'Contexto' },
   { key:'simbolos',label:'Símbolos' },
   { key:'person',  label:'Personalización' },
+  { key:'estructura', label:'Estructura' },
   { key:'cli',     label:'CLI' },
 ];
 
@@ -371,6 +392,21 @@ const COMMANDS = [
   { cat:'cli', type:'cli', name:'opencode upgrade', desc:'Actualiza OpenCode a la última versión.' },
 ];
 
+/* ---------- Estructura ---------- */
+const STRUCTURE = [
+  { cat:'estructura', type:'cmd', icon:'bi-file-text', name:'AI.md', desc:'Instrucciones y reglas para la IA. También funciona como <code>CLAUDE.md</code> (Claude Code) o <code>AGENTS.md</code> (OpenCode).' },
+  { cat:'estructura', type:'cmd', icon:'bi-book', name:'README.md', desc:'Propósito del proyecto, setup, estructura y comandos principales.' },
+  { cat:'estructura', type:'cmd', icon:'bi-journal-code', name:'docs/ARCHITECTURE.md', desc:'Stack tecnológico, estructura del proyecto y flujo de datos.' },
+  { cat:'estructura', type:'cmd', icon:'bi-palette', name:'docs/STYLEGUIDE.md', desc:'Convenciones de código, naming, formato y buenas prácticas.' },
+  { cat:'estructura', type:'cmd', icon:'bi-signpost-2', name:'docs/DECISIONS.md', desc:'Registro de decisiones técnicas (ADRs) y por qué se tomaron.' },
+  { cat:'estructura', type:'cmd', icon:'bi-list-check', name:'docs/TODO.md', desc:'Tareas pendientes, bugs conocidos y próximos pasos.' },
+  { cat:'estructura', type:'cmd', icon:'bi-clock-history', name:'docs/CHANGELOG.md', desc:'Historial de cambios del proyecto por versión.' },
+  { cat:'estructura', type:'cmd', icon:'bi-person-plus', name:'docs/CONTRIBUTING.md', desc:'Workflow de contribución, estilo de commits y PRs.' },
+  { cat:'estructura', type:'cmd', icon:'bi-shield-check', name:'docs/SECURITY.md', desc:'Consideraciones de seguridad, autenticación y manejo de secretos.' },
+  { cat:'estructura', type:'cmd', icon:'bi-graph-up-arrow', name:'docs/PROGRESS.md', desc:'Estado actual del proyecto, hitos y avance.' },
+  { cat:'estructura', type:'cmd', icon:'bi-robot', name:'docs/PROMPTS.md', desc:'Prompts útiles y ejemplos de entrada para la IA.' },
+];
+
 /* ---------- Render ---------- */
 const sectionsEl = document.getElementById('sections');
 const chipsEl = document.getElementById('chips');
@@ -402,9 +438,11 @@ function buildChips(){
 function escapeAttr(s){ return s.replace(/"/g,'&quot;'); }
 
 function cmdRow(c){
-  const glyph = c.type === 'cli' ? '$' : (c.type === 'key' ? '⌨' : '❯');
   const copyText = c.copy !== undefined ? c.copy : c.name;
   const aliasHtml = c.alias ? ` <span class="alias">· ${c.alias}</span>` : '';
+  const glyph = c.icon
+    ? `<i class="bi ${c.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>`
+    : `<span class="glyph">${c.type === 'cli' ? '$' : (c.type === 'key' ? '⌨' : '❯')}</span>`;
 
   let right = '';
   if(c.type === 'key'){
@@ -428,9 +466,11 @@ function render(){
   sectionsEl.innerHTML = '';
   let visible = 0;
 
+  const allItems = [...COMMANDS, ...STRUCTURE];
+
   CATS.forEach(cat => {
     if(activeCat !== 'all' && activeCat !== cat.key) return;
-    const items = COMMANDS.filter(c => c.cat === cat.key).filter(c => {
+    const items = allItems.filter(c => c.cat === cat.key).filter(c => {
       if(!query) return true;
       return (c.name + ' ' + c.desc + ' ' + (c.alias||'')).toLowerCase().includes(query);
     });
@@ -445,10 +485,10 @@ function render(){
   });
 
   noResults.classList.toggle('show', visible === 0);
-  const total = COMMANDS.length;
+  const total = allItems.length;
   countEl.innerHTML = query || activeCat !== 'all'
-    ? `<b>${visible}</b> de ${total} comandos`
-    : `<b>${total}</b> comandos · TUI, atajos y CLI`;
+    ? `<b>${visible}</b> de ${total} elementos`
+    : `<b>${total}</b> elementos · TUI, atajos, CLI y estructura`;
 }
 
 /* ---------- Copiar ---------- */
@@ -468,6 +508,21 @@ async function copyText(text, btn){
   setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1200);
 }
 
+/* ---------- Estructura ---------- */
+function renderStructure(){
+  const el = document.getElementById('structure-files');
+  if(!el) return;
+  el.innerHTML = STRUCTURE.map(s => `
+    <div class="cmd">
+      <i class="bi ${s.icon}" style="color:var(--amber);font-size:1.1rem;padding-top:2px;flex-shrink:0;"></i>
+      <div class="body">
+        <code class="name">${s.name}</code>
+        <div class="desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 document.addEventListener('click', e => {
   const btn = e.target.closest('.copy-btn[data-copy]');
   if(!btn) return;
@@ -483,6 +538,7 @@ document.addEventListener('keydown', e => {
 
 buildChips();
 render();
+renderStructure();
 
 /* ---------- Scroll to top ---------- */
 const scrollBtn = document.getElementById('scrollTop');
