@@ -271,7 +271,7 @@
 
     <section class="section structure-section">
       <div class="section-head">
-        <h2>Estructura del proyecto · AI-Ready</h2>
+        <h2><i class="bi bi-journal-code" style="color:var(--amber);margin-right:8px;"></i> Estructura del proyecto · AI-Ready</h2>
       </div>
       <div id="structure-files"></div>
     </section>
@@ -352,6 +352,12 @@ const CATS = [
   { key:'estructura', label:'Estructura' },
   { key:'cli',     label:'CLI' },
 ];
+
+const CAT_ICONS = {
+  atajos:'bi-keyboard', config:'bi-gear', modelos:'bi-cpu',
+  contexto:'bi-chat-dots', simbolos:'bi-sym text-slash',
+  person:'bi-person-gear', estructura:'bi-journal-code', cli:'bi-terminal',
+};
 
 /* type: 'cmd' (copiable con glyph ❯), 'cli' (copiable con $), 'key' (atajo, no copiable) */
 const COMMANDS = [
@@ -486,7 +492,7 @@ function render(){
 
     const sec = document.createElement('section');
     sec.className = 'section';
-    sec.innerHTML = `<div class="section-head"><h2>${cat.label}</h2><span class="n">${items.length}</span></div>
+    sec.innerHTML = `<div class="section-head"><h2>${CAT_ICONS[cat.key] ? `<i class="bi ${CAT_ICONS[cat.key]}" style="color:var(--amber);margin-right:8px;"></i>` : ''}${cat.label}</h2><span class="n">${items.length}</span></div>
       ${items.map(cmdRow).join('')}`;
     sectionsEl.appendChild(sec);
   });
